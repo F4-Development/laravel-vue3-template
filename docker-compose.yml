@@ -35,6 +35,8 @@ services:
 
     nginx:
         image: nginx:latest
+        build:
+            dockerfile: ./docker/nginx/Dockerfile
         ports:
             - "80:80"
             - "443:443"
