@@ -26,11 +26,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs
 
-# Копирование NGINX конфигурации и замена переменных окружения
-COPY nginx/default.template.conf /etc/nginx/default.template.conf
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
 WORKDIR /var/www/html
 
 # Копирование и установка зависимостей

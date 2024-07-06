@@ -34,17 +34,17 @@ services:
             - laravel
 
     nginx:
+        build:
+            dockerfile: docker/nginx/Dockerfile
         image: nginx:latest
         ports:
             - "80:80"
             - "443:443"
         volumes:
-            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-            - /etc/letsencrypt/live:/etc/letsencrypt/live
+            - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
             - ./:/var/www/html
         depends_on:
             - app
-        entrypoint: /usr/local/bin/docker-entrypoint.sh
         networks:
             - laravel
 
