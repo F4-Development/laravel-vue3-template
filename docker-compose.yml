@@ -34,15 +34,15 @@ services:
             - laravel
 
     nginx:
-        build:
-            dockerfile: docker/nginx/Dockerfile
         image: nginx:latest
         ports:
             - "80:80"
             - "443:443"
         volumes:
-            - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+            - ./docker/nginx/templates:/etc/nginx/templates
             - ./:/var/www/html
+        environment:
+            - NGINX_HOST=${APP_URL}
         depends_on:
             - app
         networks:

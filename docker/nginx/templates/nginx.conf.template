@@ -1,7 +1,7 @@
 server {
     listen 80;
     index index.php index.html;
-    server_name bbb.myportfolio.su;
+    server_name ${NGINX_HOST};
     root /var/www/html/public;
 
     location / {
