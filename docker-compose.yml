@@ -44,7 +44,7 @@ services:
             - ./docker/nginx/templates:/etc/nginx/templates
             - ./:/var/www/html
         environment:
-            - NGINX_HOST=${APP_URL}
+            - NGINX_HOST=${NGINX_HOST}
         depends_on:
             - app
         networks:
