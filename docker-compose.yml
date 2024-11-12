@@ -1,0 +1,72 @@
+version: '3.2'
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+        environment:
+            - APP_URL=${APP_URL}
+            - APP_ENV=${APP_ENV}
+            - APP_DEBUG=${APP_DEBUG}
+            - DB_CONNECTION=${DB_CONNECTION}
+            - DB_HOST=${DB_HOST}
+            - DB_PORT=${DB_PORT}
+            - DB_DATABASE=${DB_DATABASE}
+            - DB_USERNAME=${DB_USERNAME}
+            - DB_PASSWORD=${DB_PASSWORD}
+        volumes:
+            - ./:/var/www/html
+        depends_on:
+            - db
+        networks:
+            - laravel
+
+    db:
+        image: postgres:13
+        environment:
+            POSTGRES_DB: ${DB_DATABASE}
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        networks:
+            - laravel
+
+    nginx:
+        image: nginx:latest
+        build:
+            dockerfile: ./docker/nginx/Dockerfile
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./docker/nginx/templates:/etc/nginx/templates
+            - ./:/var/www/html
+        environment:
+            - NGINX_HOST=${NGINX_HOST}
+        depends_on:
+            - app
+        networks:
+            - laravel
+
+    adminer:
+        image: adminer
+        ports:
+            - 9090:8080
+        networks:
+            - laravel
+
+    mailpit:
+        image: axllent/mailpit
+        ports:
+            - 8025:8025
+        networks:
+            - laravel
+
+volumes:
+    pgdata:
+
+networks:
+    laravel:
+        driver: bridge
